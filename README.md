@@ -65,6 +65,10 @@ Belge, sırayla uygulanan **özelliklerden** oluşur (`primitive`, `extrude`, `r
 
 ## Kurulum
 
+**En kolay yol (Windows):** [Node.js LTS](https://nodejs.org) kurun, proje klasöründeki **`baslat.bat`** dosyasına çift tıklayın. İlk seferde paketler indirilir, ardından tarayıcı kendiliğinden açılır. macOS/Linux'ta **`baslat.command`** kullanılır.
+
+Komut satırından:
+
 ```bash
 npm install
 npm run dev      # geliştirme sunucusu (http://localhost:5173)

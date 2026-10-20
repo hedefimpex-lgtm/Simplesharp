@@ -1,9 +1,9 @@
 {
   "name": "sharp3d",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "private": true,
   "type": "module",
-  "description": "Sharp3D - tarayıcıda çalışan hafif 3D sahne editörü",
+  "description": "Sharp3D - tarayıcıda çalışan, OpenCascade çekirdekli 3B CAD modelleme aracı",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
@@ -11,9 +11,10 @@
     "test": "node tests/smoke.mjs"
   },
   "dependencies": {
-    "three": "^0.186.1",
-    "three-bvh-csg": "^0.0.18",
-    "three-mesh-bvh": "^0.9.16"
+    "lucide": "^0.460.0",
+    "replicad": "^1.1.0",
+    "replicad-opencascadejs": "^1.1.0",
+    "three": "^0.186.1"
   },
   "devDependencies": {
     "playwright": "^1.56.1",

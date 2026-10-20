@@ -3,110 +3,172 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-    <meta name="theme-color" content="#1c2027" />
-    <meta name="description" content="Sharp3D - tarayıcıda çalışan, çizip katılaştırmaya dayalı 3D modelleme aracı" />
+    <meta name="theme-color" content="#1b1f26" />
+    <meta name="description" content="Sharp3D - tarayıcıda çalışan, gerçek CAD çekirdekli 3B modelleme aracı" />
     <title>Sharp3D</title>
     <link rel="stylesheet" href="./src/style.css" />
   </head>
   <body>
-    <header class="toolbar">
-      <span class="brand">Sharp3D</span>
-
-      <div class="group" aria-label="Çizim">
-        <button data-tool="rect" title="Dikdörtgen çiz (1)">Dikdörtgen</button>
-        <button data-tool="circle" title="Daire çiz (2)">Daire</button>
-        <button data-tool="poly" title="Çokgen çiz (3)">Çokgen</button>
-        <button data-tool="measure" title="Ölç (M)">Ölç</button>
-      </div>
-
-      <div class="group" aria-label="Katı ekle">
-        <button data-add="box" title="Küp ekle">Küp</button>
-        <button data-add="sphere" title="Küre ekle">Küre</button>
-        <button data-add="cylinder" title="Silindir ekle">Silindir</button>
-        <button data-add="cone" title="Koni ekle">Koni</button>
-        <button data-add="torus" title="Simit ekle">Simit</button>
-        <button data-add="plane" title="Düzlem ekle">Düzlem</button>
-      </div>
-
-      <div class="group" aria-label="Boolean">
-        <button data-bool="union" title="Seçili katıları birleştir (Shift ile çoklu seçim)">Birleştir</button>
-        <button data-bool="subtract" title="İlk seçilenden diğerlerini çıkar">Çıkar</button>
-        <button data-bool="intersect" title="Seçili katıların kesişimini al">Kesiştir</button>
-      </div>
-
-      <div class="group" aria-label="Dönüşüm">
-        <button data-mode="translate" class="active" title="Taşı (W)">Taşı</button>
-        <button data-mode="rotate" title="Döndür (E)">Döndür</button>
-        <button data-mode="scale" title="Ölçekle (R)">Ölçekle</button>
-        <button id="snap" title="Izgaraya yasla (S)">Yasla</button>
-      </div>
-
-      <div class="group" aria-label="Düzen">
-        <button id="undo" title="Geri al (Ctrl+Z)">Geri</button>
-        <button id="redo" title="Yinele (Ctrl+Y)">İleri</button>
-        <button id="duplicate" title="Çoğalt (Ctrl+D)">Çoğalt</button>
-        <button id="delete" title="Sil (Delete)">Sil</button>
-      </div>
-
-      <div class="group" aria-label="Görünüm">
-        <button data-view="iso" title="İzometrik görünüm (0)">İzo</button>
-        <button data-view="top" title="Üstten görünüm (7)">Üst</button>
-        <button data-view="front" title="Önden görünüm (8)">Ön</button>
-        <button data-view="right" title="Sağdan görünüm (9)">Sağ</button>
-        <button id="focus" title="Seçime odaklan (F)">Odakla</button>
-      </div>
-
-      <div class="group" aria-label="Dosya">
-        <button id="open" title="Proje aç (Ctrl+O)">Aç</button>
-        <button id="save" title="Projeyi kaydet (Ctrl+S)">Kaydet</button>
-        <button id="import" title="GLB/GLTF/OBJ/STL içe aktar">İçe aktar</button>
-        <select id="export-format" aria-label="Dışa aktarma biçimi">
-          <option value="stl">STL</option>
-          <option value="obj">OBJ</option>
-          <option value="glb">GLB</option>
-        </select>
-        <button id="export" title="Seçili biçimde dışa aktar">Dışa aktar</button>
-        <button id="screenshot" title="PNG ekran görüntüsü">Görüntü</button>
-        <button id="clear" title="Sahneyi temizle">Temizle</button>
-        <input id="file" type="file" accept=".glb,.gltf,.obj,.stl" multiple hidden />
-        <input id="project-file" type="file" accept=".json,application/json" hidden />
-      </div>
-    </header>
-
-    <main class="layout">
-      <aside class="panel" id="outliner">
-        <h2>Sahne</h2>
-        <ul id="tree"></ul>
-        <p class="hint">Shift + tık: çoklu seçim</p>
-      </aside>
-
-      <section id="viewport">
-        <div class="drop-hint">Model dosyalarını buraya sürükleyin</div>
-        <div class="hud" id="hud" hidden></div>
-        <div class="stats" id="stats"></div>
-        <div class="fatal" id="fatal" hidden></div>
+    <!-- Proje ekranı -->
+    <main id="home" class="screen" hidden>
+      <header class="home-bar">
+        <span class="brand">Sharp3D</span>
+        <div class="spacer"></div>
+        <button id="home-import" class="btn">Dosyadan aç</button>
+        <button id="sample-design" class="btn">Örnek tasarım</button>
+        <button id="new-design" class="btn primary">+ Yeni tasarım</button>
+        <input id="home-file" type="file" accept=".step,.stp,.stl,.json" multiple hidden />
+      </header>
+      <section class="home-body">
+        <h1>Tasarımlarım</h1>
+        <div id="home-empty" class="home-empty" hidden>
+          <p>Henüz tasarımınız yok.</p>
+          <p>Yeni bir tasarım başlatın, örnek tasarımı açın ya da bir STEP / STL dosyasını buraya sürükleyin.</p>
+        </div>
+        <div id="design-grid" class="design-grid"></div>
       </section>
+    </main>
 
-      <aside class="panel" id="inspector">
-        <h2>Özellikler</h2>
-        <div id="props" class="empty">Bir nesne seçin</div>
-        <h2>Ortam</h2>
-        <label class="row">Birim
-          <select id="unit">
+    <!-- Tasarım çalışma alanı -->
+    <div id="workspace" class="screen" hidden data-space="model">
+      <header class="topbar">
+        <button id="home-btn" class="icon-btn" title="Projeler" aria-label="Projeler">⌂</button>
+        <input id="design-name" class="design-name" aria-label="Tasarım adı" />
+        <span id="save-state" class="save-state"></span>
+        <div class="spacer"></div>
+        <nav id="spaces" class="segmented" aria-label="Çalışma alanı">
+          <button data-space="model" class="active">Modelleme</button>
+          <button data-space="visual">Görselleştirme</button>
+          <button data-space="drawing">Teknik çizim</button>
+        </nav>
+        <div class="spacer"></div>
+        <button id="undo" class="icon-btn" title="Geri al (Ctrl+Z)" aria-label="Geri al">↶</button>
+        <button id="redo" class="icon-btn" title="Yinele (Ctrl+Y)" aria-label="Yinele">↷</button>
+        <div class="menu-wrap">
+          <button id="export-btn" class="btn primary">Dışa aktar</button>
+          <div id="export-menu" class="menu" hidden>
+            <button data-format="step">STEP <small>CAD, katı model</small></button>
+            <button data-format="stl">STL <small>3B yazıcı (mm)</small></button>
+            <button data-format="obj">OBJ <small>ağ (mm)</small></button>
+            <button data-format="glb">GLB <small>web / AR (m)</small></button>
+            <button data-format="png">PNG <small>görüntü</small></button>
+            <button data-format="project">Tasarım dosyası <small>.sharp3d.json</small></button>
+          </div>
+        </div>
+        <button id="settings-btn" class="icon-btn" title="Ayarlar" aria-label="Ayarlar">⚙</button>
+      </header>
+
+      <div class="work">
+        <aside id="items" class="side items">
+          <h2>Öğeler <span id="items-count" class="count">0</span></h2>
+          <ul id="items-list"></ul>
+          <p class="hint">Tık: seç · Shift+tık: ekle · Çift tık: ad değiştir</p>
+        </aside>
+
+        <section id="viewport">
+          <div class="drop-hint">STEP ya da STL dosyasını bırakın</div>
+          <div id="hud" class="hud" hidden></div>
+          <div class="view-tools">
+            <button id="fit-btn" class="icon-btn" title="Sığdır (F)">⤢</button>
+            <button id="ortho-toggle" class="icon-btn" title="Ortografik görünüm">⊡</button>
+          </div>
+          <div id="filter" class="segmented small filter" aria-label="Seçim filtresi">
+            <button data-filter="auto" class="active">Otomatik</button>
+            <button data-filter="body">Gövde</button>
+            <button data-filter="face">Yüz</button>
+            <button data-filter="edge">Kenar</button>
+          </div>
+          <div id="selection-bar" class="selection-bar" hidden>
+            <span id="selection-info"></span>
+            <div id="selection-actions"></div>
+          </div>
+          <div id="tool-panel" class="tool-panel" hidden>
+            <h3 id="op-title"></h3>
+            <div id="op-fields"></div>
+            <p id="op-message" class="op-message"></p>
+            <div class="panel-buttons">
+              <button id="op-cancel" class="btn">İptal</button>
+              <button id="op-apply" class="btn primary">Uygula</button>
+            </div>
+          </div>
+          <div id="busy" class="busy" hidden></div>
+          <div id="kernel-loading" class="kernel-loading">Geometri çekirdeği yükleniyor…</div>
+          <div class="stats" id="stats"></div>
+          <button id="items-toggle" class="icon-btn mobile-only items-toggle" title="Öğeler">☰</button>
+          <button id="tools-toggle" class="icon-btn mobile-only tools-toggle" title="Araçlar">✚</button>
+        </section>
+
+        <aside class="side right">
+          <nav id="tools" class="tools model-only" aria-label="Araçlar"></nav>
+          <div class="visual-panel visual-only">
+            <h2>Malzemeler</h2>
+            <p class="hint">Seçili gövdelere (seçim yoksa tümüne) uygulanır.</p>
+            <div id="material-list" class="material-list"></div>
+            <h2>Ortam</h2>
+            <label class="field"><span>Işık</span><input id="visual-light" type="range" min="0" max="2" step="0.05" value="0.55" /></label>
+            <label class="field"><span>Arka plan</span><input id="visual-bg" type="color" value="#2a2f37" /></label>
+            <label class="field"><span>Gölgeler</span><input id="visual-shadows" type="checkbox" checked /></label>
+            <button id="visual-shot" class="btn primary wide">Görüntü al (PNG)</button>
+          </div>
+          <div class="drawing-panel drawing-only">
+            <h2>Teknik çizim</h2>
+            <p class="hint">Görünür gövdelerin ön, üst ve sağ görünüşleri A4 paftada. Gizli kenarlar kesikli çizilir.</p>
+            <button id="download-drawing" class="btn primary wide">SVG indir</button>
+            <button id="print-drawing" class="btn wide">Yazdır / PDF</button>
+          </div>
+        </aside>
+      </div>
+
+      <div id="drawing-sheet" class="drawing-sheet" hidden><div id="drawing-svg"></div></div>
+
+      <footer class="history">
+        <span class="history-title">Geçmiş</span>
+        <p id="history-empty" class="hint">Adımlar burada görünür; düzenlemek için bir adıma tıklayın.</p>
+        <ol id="history-list"></ol>
+      </footer>
+      <input id="import-file" type="file" accept=".step,.stp,.stl" multiple hidden />
+    </div>
+
+    <dialog id="settings-dialog">
+      <form method="dialog">
+        <h2>Ayarlar</h2>
+        <label class="field"><span>Birim</span>
+          <select id="set-unit">
             <option value="mm">Milimetre</option>
             <option value="cm">Santimetre</option>
             <option value="m">Metre</option>
             <option value="in">İnç</option>
           </select>
         </label>
-        <label class="row">Arka plan <input type="color" id="bg" value="#1e2229" /></label>
-        <label class="row">Izgara <input type="checkbox" id="grid" checked /></label>
-        <label class="row">Gölgeler <input type="checkbox" id="shadows" checked /></label>
-        <label class="row">Kenarlar <input type="checkbox" id="edges" checked /></label>
-        <label class="row">Tel kafes <input type="checkbox" id="wireframe" /></label>
-      </aside>
-    </main>
+        <label class="field"><span>Yakalama adımı</span>
+          <select id="set-snap">
+            <option value="0">Kapalı</option>
+            <option value="0.1">0,1 mm</option>
+            <option value="0.5">0,5 mm</option>
+            <option value="1">1 mm</option>
+            <option value="5">5 mm</option>
+            <option value="10">10 mm</option>
+          </select>
+        </label>
+        <label class="field"><span>Izgara</span><input id="set-grid" type="checkbox" /></label>
+        <label class="field"><span>Kenar çizgileri</span><input id="set-edges" type="checkbox" /></label>
+        <label class="field"><span>Ortografik kamera</span><input id="set-ortho" type="checkbox" /></label>
+        <h3>Kısayollar</h3>
+        <dl class="shortcuts">
+          <dt>1 / 2 / 3</dt><dd>Dikdörtgen / Daire / Çokgen çiz</dd>
+          <dt>U · Y · T</dt><dd>Uzat · Yuvarla · Taşı</dd>
+          <dt>M</dt><dd>Ölç</dd>
+          <dt>Enter / Esc</dt><dd>Uygula / İptal</dd>
+          <dt>Çift tık</dt><dd>Gövdenin tamamını seç</dd>
+          <dt>F · 0 · 7 · 8 · 9</dt><dd>Sığdır · İzometrik · Üst · Ön · Sağ</dd>
+          <dt>Ctrl+Z / Ctrl+Y</dt><dd>Geri al / Yinele</dd>
+          <dt>Ctrl+D · Delete</dt><dd>Çoğalt · Sil</dd>
+        </dl>
+        <button class="btn primary wide">Kapat</button>
+      </form>
+    </dialog>
 
+    <div id="fatal" class="fatal" hidden><p id="fatal-message"></p></div>
     <div id="toasts" aria-live="polite"></div>
     <script type="module" src="./src/main.js"></script>
   </body>

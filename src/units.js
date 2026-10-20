@@ -1,37 +1,29 @@
-// Ölçü birimleri. Sahnede 1 birim = 100 mm kabul edilir.
-export const MM_PER_UNIT = 100;
-
+// Ölçü birimleri. Model her zaman milimetre cinsindendir; birim yalnızca gösterimi etkiler.
 export const UNITS = {
-  mm: { label: 'mm', perUnit: MM_PER_UNIT, digits: 1 },
-  cm: { label: 'cm', perUnit: MM_PER_UNIT / 10, digits: 2 },
-  m: { label: 'm', perUnit: MM_PER_UNIT / 1000, digits: 4 },
-  in: { label: 'in', perUnit: MM_PER_UNIT / 25.4, digits: 3 },
+  mm: { label: 'mm', perMm: 1, digits: 2 },
+  cm: { label: 'cm', perMm: 0.1, digits: 3 },
+  m: { label: 'm', perMm: 0.001, digits: 5 },
+  in: { label: 'in', perMm: 1 / 25.4, digits: 4 },
 };
 
 let current = 'mm';
 
-export function getUnit() { return current; }
-
-export function setUnit(unit) {
-  if (UNITS[unit]) current = unit;
-}
-
+export const getUnit = () => current;
+export function setUnit(unit) { if (UNITS[unit]) current = unit; }
 export const unitLabel = () => UNITS[current].label;
 
-// Sahne birimini seçili birime çevirir.
-export const toDisplay = (value) => value * UNITS[current].perUnit;
+// mm -> seçili birim
+export const toDisplay = (mm) => mm * UNITS[current].perMm;
+// seçili birim -> mm
+export const fromDisplay = (value) => value / UNITS[current].perMm;
 
-// Seçili birimdeki değeri sahne birimine çevirir.
-export const fromDisplay = (value) => value / UNITS[current].perUnit;
-
-export function round(value) {
-  const f = 10 ** UNITS[current].digits;
+export function round(value, digits = UNITS[current].digits) {
+  const f = 10 ** digits;
   return Math.round(value * f) / f;
 }
 
-export const format = (value) => `${round(toDisplay(value)).toLocaleString('tr-TR')} ${unitLabel()}`;
+const fmt = (v) => v.toLocaleString('tr-TR', { maximumFractionDigits: UNITS[current].digits });
 
-// Seçili birimde bir adım (ızgaraya yaslama ve sayı kutuları için).
-export function displayStep() {
-  return { mm: 1, cm: 0.1, m: 0.001, in: 0.05 }[current];
-}
+export const format = (mm) => `${fmt(round(toDisplay(mm)))} ${unitLabel()}`;
+export const formatArea = (mm2) => `${fmt(round(mm2 * UNITS[current].perMm ** 2))} ${unitLabel()}²`;
+export const formatVolume = (mm3) => `${fmt(round(mm3 * UNITS[current].perMm ** 3))} ${unitLabel()}³`;

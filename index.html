@@ -2,21 +2,36 @@
 <html lang="tr">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#1c2027" />
+    <meta name="description" content="Sharp3D - tarayıcıda çalışan, çizip katılaştırmaya dayalı 3D modelleme aracı" />
     <title>Sharp3D</title>
-    <link rel="stylesheet" href="/src/style.css" />
+    <link rel="stylesheet" href="./src/style.css" />
   </head>
   <body>
     <header class="toolbar">
       <span class="brand">Sharp3D</span>
 
-      <div class="group" aria-label="Ekle">
+      <div class="group" aria-label="Çizim">
+        <button data-tool="rect" title="Dikdörtgen çiz (1)">Dikdörtgen</button>
+        <button data-tool="circle" title="Daire çiz (2)">Daire</button>
+        <button data-tool="poly" title="Çokgen çiz (3)">Çokgen</button>
+        <button data-tool="measure" title="Ölç (M)">Ölç</button>
+      </div>
+
+      <div class="group" aria-label="Katı ekle">
         <button data-add="box" title="Küp ekle">Küp</button>
         <button data-add="sphere" title="Küre ekle">Küre</button>
         <button data-add="cylinder" title="Silindir ekle">Silindir</button>
         <button data-add="cone" title="Koni ekle">Koni</button>
         <button data-add="torus" title="Simit ekle">Simit</button>
         <button data-add="plane" title="Düzlem ekle">Düzlem</button>
+      </div>
+
+      <div class="group" aria-label="Boolean">
+        <button data-bool="union" title="Seçili katıları birleştir (Shift ile çoklu seçim)">Birleştir</button>
+        <button data-bool="subtract" title="İlk seçilenden diğerlerini çıkar">Çıkar</button>
+        <button data-bool="intersect" title="Seçili katıların kesişimini al">Kesiştir</button>
       </div>
 
       <div class="group" aria-label="Dönüşüm">
@@ -31,15 +46,30 @@
         <button id="redo" title="Yinele (Ctrl+Y)">İleri</button>
         <button id="duplicate" title="Çoğalt (Ctrl+D)">Çoğalt</button>
         <button id="delete" title="Sil (Delete)">Sil</button>
+      </div>
+
+      <div class="group" aria-label="Görünüm">
+        <button data-view="iso" title="İzometrik görünüm (0)">İzo</button>
+        <button data-view="top" title="Üstten görünüm (7)">Üst</button>
+        <button data-view="front" title="Önden görünüm (8)">Ön</button>
+        <button data-view="right" title="Sağdan görünüm (9)">Sağ</button>
         <button id="focus" title="Seçime odaklan (F)">Odakla</button>
       </div>
 
       <div class="group" aria-label="Dosya">
+        <button id="open" title="Proje aç (Ctrl+O)">Aç</button>
+        <button id="save" title="Projeyi kaydet (Ctrl+S)">Kaydet</button>
         <button id="import" title="GLB/GLTF/OBJ/STL içe aktar">İçe aktar</button>
-        <button id="export" title="GLB olarak dışa aktar">Dışa aktar</button>
+        <select id="export-format" aria-label="Dışa aktarma biçimi">
+          <option value="stl">STL</option>
+          <option value="obj">OBJ</option>
+          <option value="glb">GLB</option>
+        </select>
+        <button id="export" title="Seçili biçimde dışa aktar">Dışa aktar</button>
         <button id="screenshot" title="PNG ekran görüntüsü">Görüntü</button>
         <button id="clear" title="Sahneyi temizle">Temizle</button>
         <input id="file" type="file" accept=".glb,.gltf,.obj,.stl" multiple hidden />
+        <input id="project-file" type="file" accept=".json,application/json" hidden />
       </div>
     </header>
 
@@ -47,24 +77,37 @@
       <aside class="panel" id="outliner">
         <h2>Sahne</h2>
         <ul id="tree"></ul>
+        <p class="hint">Shift + tık: çoklu seçim</p>
       </aside>
 
       <section id="viewport">
         <div class="drop-hint">Model dosyalarını buraya sürükleyin</div>
+        <div class="hud" id="hud" hidden></div>
         <div class="stats" id="stats"></div>
+        <div class="fatal" id="fatal" hidden></div>
       </section>
 
       <aside class="panel" id="inspector">
         <h2>Özellikler</h2>
         <div id="props" class="empty">Bir nesne seçin</div>
         <h2>Ortam</h2>
+        <label class="row">Birim
+          <select id="unit">
+            <option value="mm">Milimetre</option>
+            <option value="cm">Santimetre</option>
+            <option value="m">Metre</option>
+            <option value="in">İnç</option>
+          </select>
+        </label>
         <label class="row">Arka plan <input type="color" id="bg" value="#1e2229" /></label>
         <label class="row">Izgara <input type="checkbox" id="grid" checked /></label>
         <label class="row">Gölgeler <input type="checkbox" id="shadows" checked /></label>
+        <label class="row">Kenarlar <input type="checkbox" id="edges" checked /></label>
         <label class="row">Tel kafes <input type="checkbox" id="wireframe" /></label>
       </aside>
     </main>
 
-    <script type="module" src="/src/main.js"></script>
+    <div id="toasts" aria-live="polite"></div>
+    <script type="module" src="./src/main.js"></script>
   </body>
 </html>

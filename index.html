@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="tr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sharp3D</title>
+    <link rel="stylesheet" href="/src/style.css" />
+  </head>
+  <body>
+    <header class="toolbar">
+      <span class="brand">Sharp3D</span>
+
+      <div class="group" aria-label="Ekle">
+        <button data-add="box" title="Küp ekle">Küp</button>
+        <button data-add="sphere" title="Küre ekle">Küre</button>
+        <button data-add="cylinder" title="Silindir ekle">Silindir</button>
+        <button data-add="cone" title="Koni ekle">Koni</button>
+        <button data-add="torus" title="Simit ekle">Simit</button>
+        <button data-add="plane" title="Düzlem ekle">Düzlem</button>
+      </div>
+
+      <div class="group" aria-label="Dönüşüm">
+        <button data-mode="translate" class="active" title="Taşı (W)">Taşı</button>
+        <button data-mode="rotate" title="Döndür (E)">Döndür</button>
+        <button data-mode="scale" title="Ölçekle (R)">Ölçekle</button>
+        <button id="snap" title="Izgaraya yasla (S)">Yasla</button>
+      </div>
+
+      <div class="group" aria-label="Düzen">
+        <button id="undo" title="Geri al (Ctrl+Z)">Geri</button>
+        <button id="redo" title="Yinele (Ctrl+Y)">İleri</button>
+        <button id="duplicate" title="Çoğalt (Ctrl+D)">Çoğalt</button>
+        <button id="delete" title="Sil (Delete)">Sil</button>
+        <button id="focus" title="Seçime odaklan (F)">Odakla</button>
+      </div>
+
+      <div class="group" aria-label="Dosya">
+        <button id="import" title="GLB/GLTF/OBJ/STL içe aktar">İçe aktar</button>
+        <button id="export" title="GLB olarak dışa aktar">Dışa aktar</button>
+        <button id="screenshot" title="PNG ekran görüntüsü">Görüntü</button>
+        <button id="clear" title="Sahneyi temizle">Temizle</button>
+        <input id="file" type="file" accept=".glb,.gltf,.obj,.stl" multiple hidden />
+      </div>
+    </header>
+
+    <main class="layout">
+      <aside class="panel" id="outliner">
+        <h2>Sahne</h2>
+        <ul id="tree"></ul>
+      </aside>
+
+      <section id="viewport">
+        <div class="drop-hint">Model dosyalarını buraya sürükleyin</div>
+        <div class="stats" id="stats"></div>
+      </section>
+
+      <aside class="panel" id="inspector">
+        <h2>Özellikler</h2>
+        <div id="props" class="empty">Bir nesne seçin</div>
+        <h2>Ortam</h2>
+        <label class="row">Arka plan <input type="color" id="bg" value="#1e2229" /></label>
+        <label class="row">Izgara <input type="checkbox" id="grid" checked /></label>
+        <label class="row">Gölgeler <input type="checkbox" id="shadows" checked /></label>
+        <label class="row">Tel kafes <input type="checkbox" id="wireframe" /></label>
+      </aside>
+    </main>
+
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>

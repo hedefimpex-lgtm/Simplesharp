@@ -1,0 +1,18 @@
+{
+  "name": "sharp3d",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Sharp3D - tarayıcıda çalışan hafif 3D sahne editörü",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "three": "^0.169.0"
+  },
+  "devDependencies": {
+    "vite": "^5.4.10"
+  }
+}

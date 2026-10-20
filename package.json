@@ -8,16 +8,71 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "test": "node tests/smoke.mjs"
-  },
-  "dependencies": {
-    "lucide": "^0.460.0",
-    "replicad": "^1.1.0",
-    "replicad-opencascadejs": "^1.1.0",
-    "three": "^0.186.1"
+    "test": "node tests/smoke.mjs",
+    "desktop": "vite build && electron .",
+    "dist:win": "vite build && electron-builder --win nsis --x64"
   },
   "devDependencies": {
+    "electron": "43.7.11",
+    "electron-builder": "^26.15.3",
+    "lucide": "^0.460.0",
     "playwright": "^1.56.1",
+    "replicad": "^1.1.0",
+    "replicad-opencascadejs": "^1.1.0",
+    "resedit": "^3.1.0",
+    "three": "^0.186.1",
     "vite": "^5.4.10"
+  },
+  "main": "electron/main.cjs",
+  "author": {
+    "name": "Sharp3D"
+  },
+  "homepage": "https://github.com/hedefimpex-lgtm/Simplesharp",
+  "build": {
+    "appId": "app.sharp3d.desktop",
+    "productName": "Sharp3D",
+    "copyright": "Sharp3D",
+    "directories": {
+      "output": "release",
+      "buildResources": "build"
+    },
+    "files": [
+      "dist/**/*",
+      "electron/**/*",
+      "package.json"
+    ],
+    "asar": true,
+    "afterPack": "./scripts/after-pack.cjs",
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "icon": "build/icon.ico",
+      "signAndEditExecutable": false
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "Sharp3D",
+      "installerIcon": "build/icon.ico",
+      "uninstallerIcon": "build/icon.ico",
+      "installerHeaderIcon": "build/icon.ico",
+      "uninstallDisplayName": "Sharp3D",
+      "artifactName": "Sharp3D-Setup-${version}.exe",
+      "language": "1055",
+      "installerLanguages": [
+        "tr_TR"
+      ],
+      "unicode": true,
+      "deleteAppDataOnUninstall": false
+    }
   }
 }

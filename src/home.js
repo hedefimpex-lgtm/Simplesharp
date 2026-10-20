@@ -2,7 +2,7 @@ import { emptyDesign, Design } from './design.js';
 import { listDesigns, getDesign, putDesign, deleteDesign, newId } from './store.js';
 import { download, fileToBase64, hashString, safeName } from './workspace.js';
 import { icon } from './icons.js';
-import { toast } from './ui.js';
+import { toast, askText } from './ui.js';
 
 // Proje ekranı: kayıtlı tasarımların galerisi.
 
@@ -133,8 +133,8 @@ export class Home {
   }
 
   async rename(d) {
-    const name = prompt('Tasarım adı', d.name);
-    if (!name?.trim()) return;
+    const name = await askText('Tasarım adı', d.name);
+    if (!name) return;
     const record = await getDesign(d.id);
     record.name = name.trim();
     await putDesign(record);

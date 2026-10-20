@@ -1,0 +1,33 @@
+name: Windows kurulum dosyası
+
+# "v0.3.0" gibi bir etiket gönderildiğinde Sharp3D-Setup-<sürüm>.exe derlenir ve
+# GitHub Releases'e eklenir. Elle de çalıştırılabilir (Actions → Çalıştır).
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run dist:win
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Sharp3D-Setup
+          path: release/*.exe
+      - name: Sürüme ekle
+        if: startsWith(github.ref, 'refs/tags/')
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release create "$GITHUB_REF_NAME" release/*.exe --title "Sharp3D $GITHUB_REF_NAME" --notes "Windows kurulum dosyası" || gh release upload "$GITHUB_REF_NAME" release/*.exe --clobber

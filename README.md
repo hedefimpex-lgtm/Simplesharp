@@ -79,6 +79,19 @@ npm test         # derleme üzerinde uçtan uca tarayıcı testleri (önce: npx 
 
 `dist/` statik dosyalardan oluşur ve göreli yollar kullanır; herhangi bir statik sunucuya ya da alt dizine kopyalanabilir. Geometri çekirdeği (~23 MB WebAssembly, sıkıştırılmış ~7 MB) ilk açılışta indirilir ve tarayıcı önbelleğinde kalır.
 
+### Masaüstü uygulaması (Windows setup.exe)
+
+Uygulama Electron ile masaüstü programı olarak da paketlenir. Kurulum dosyası Türkçe sihirbazlıdır; kurulum klasörü seçilebilir, masaüstü ve Başlat menüsü kısayolu oluşturur, Programlar ve Özellikler'den kaldırılabilir. Tasarımlar bilgisayarda saklanır, internet gerekmez.
+
+```bash
+npm run desktop    # masaüstü uygulamasını geliştirme için aç
+npm run dist:win   # release/Sharp3D-Setup-<sürüm>.exe üret
+```
+
+Windows'ta doğrudan çalışır. Linux/macOS'ta Wine (64 ve 32 bit) gerekir. `v0.3.0` gibi bir etiket gönderildiğinde `.github/workflows/desktop.yml` kurulum dosyasını Windows üzerinde derleyip GitHub Releases'e ekler.
+
+Kurulum dosyası kod imzalı değildir; Windows SmartScreen ilk açılışta "Bilinmeyen yayımcı" uyarısı verir (**Ek bilgi → Yine de çalıştır**). Uyarıyı kaldırmak için bir kod imzalama sertifikası gerekir.
+
 ### GitHub Pages ile yayınlama
 
 `.github/workflows/deploy.yml` her `main` gönderiminde derler, test eder ve GitHub Pages'e yayınlar. Bir kez depo ayarlarından **Settings → Pages → Source: GitHub Actions** seçilmelidir.
